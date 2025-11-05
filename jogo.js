@@ -26,16 +26,29 @@ function jogar() {
     console.log("\n-----------------------");
     console.log("Você está em: ", dadosSalaAtual.description);
 
-    const direcoes = ["north", "south", "east", "west", "up", "down"];
-    const direcoes_disponiveis = [];
+    const monstro_na_sala = dadosSalaAtual.monster;
+    let saida_bloqueada = false;
 
-    for (const saida of direcoes) {
-        if (dadosSalaAtual[saida]) {
-            direcoes_disponiveis.push(saida);
-        }
+    if (monstro_na_sala) {
+        console.log("!! PERIGO !!: " + monstro_na_sala.description);
+        saida_bloqueada = true;
     }
 
-    console.log("\nDireções disponíveis: " + direcoes_disponiveis.join(", "));
+    if (!saida_bloqueada) {
+        const direcoes = ["north", "south", "east", "west", "up", "down"];
+        const direcoes_disponiveis = [];
+        for (const saida of direcoes) {
+            if (dadosSalaAtual[saida]) {
+                direcoes_disponiveis.push(saida);
+            }
+        }
+
+        console.log("\nDireções disponíveis: " + direcoes_disponiveis.join(", "));
+
+    } else {
+        console.log("\nO monstro bloqueou todas as saídas!!!");
+    }
+
 
     const itens_na_sala = Object.keys(dadosSalaAtual.itens); //“Pegue o objeto itens dentro de dadosSalaAtual, e crie uma lista com os nomes de todos os itens dessa sala.”
     if (itens_na_sala.length > 0) {
@@ -49,23 +62,28 @@ function jogar() {
         const argumento = partes[1] // vai ser a segunda parte da resposta: "vela", "norte"
 
 
-        const proximaSala = dadosSalaAtual[resposta];
+        const proximaSala = dadosSalaAtual[comando];
 
-        if (proximaSala) {
+        if (proximaSala && !saida_bloqueada) {
 
             nomeSalaAtual = proximaSala;
 
-        } else if (comando === "olhar") {
+        } else if (proximaSala && saida_bloqueada) {
+            console.log("\nVocê não pode sair, o monstro bloqueou o caminho!");
+        }
+
+        else if (comando === "olhar") {
 
 
         } else if (comando === "inventario" || comando === "i") {
 
             const itens_no_inventario = Object.keys(inventario);
             if (itens_no_inventario.length === 0) {
-                console.log("Seu inventário está vazio");
+                console.log("\nSeu inventário está vazio");
             } else {
-                console.log("Você está carregando: " + itens_no_inventario.join(", "));
+                console.log("\nVocê está carregando: " + itens_no_inventario.join(", "));
             }
+
 
         } else if (comando == "pegar") {
 
@@ -73,22 +91,104 @@ function jogar() {
 
             if (dadosSalaAtual.itens[item_para_pegar]) {
 
-                const descricao_item = dadosSalaAtual.itens[item_para_pegar];
-                inventario[item_para_pegar] = descricao_item;
+                if (Object.keys(inventario).length >= mapaDoJogo.max_itens) {
+                    console.log("\nSeu inventário está cheio! Você não pode pegar mais itens.")
+                }
+                else {
+                    const descricao_item = dadosSalaAtual.itens[item_para_pegar];
+                    inventario[item_para_pegar] = descricao_item;
+                    delete dadosSalaAtual.itens[item_para_pegar];
 
-                delete dadosSalaAtual.itens[item_para_pegar];
-
-                console.log(`\nVocê pegou: ${item_para_pegar}`);
-            } else {
+                    console.log(`\nVocê pegou: ${item_para_pegar}`);
+                }
+            }
+            else {
                 console.log(`\nNão há ${item_para_pegar} aqui`)
             }
+
+
+        } else if (comando === "usar") {
+            const item_para_usar = argumento;
+
+            if (!inventario[item_para_usar]) {
+                console.log(`\nVocê não tem ${item_para_usar} no seu inventário.`);
+            }
+            else if (monstro_na_sala) {
+
+                if (item_para_usar === monstro_na_sala.defeat_item) {
+                    console.log(`\n!!Você conseguiu derrotar: ${monstro_na_sala.name}!!`);
+                    dadosSalaAtual.monster = null;
+                }
+                else {
+                    console.log(`\nO ${item_para_usar} não funciona contra ${monstro_na_sala.name}.`);
+                }
+            }
+            else {
+
+                // Tenta encontrar uma interação válida para este item no array 'use' da sala
+                // O .find() procura na lista 'use' por um objeto 'u' onde 'u.item' é igual ao 'itemParaUsar'
+                const interacao = dadosSalaAtual.use.find(objeto_interacao => objeto_interacao.item === item_para_usar);
+
+                if (interacao) {
+                    console.log(interacao.description);
+
+                    switch (interacao.action) {
+                        case "abrir nova direção":
+                            console.log("Ainda nao podemos seguir esse caminho...");
+                            break;
+
+                        case "sumir com item":
+                            delete inventario[item_para_usar];
+                            console.log(`Você não tem mais posse de ${item_para_usar}`);
+                            break;
+                    }
+
+                } else { console.log("\nNão há mosntros aqui."); }
+
+
+            }
+
+
+        } else if (comando === "drop") {
+
+            const item_para_dropar = argumento;
+
+            if (!inventario[item_para_dropar]) {
+                console.log(`Você não tem ${item_para_dropar} no seu inventário.`);
+            }
+            else {
+                console.log(`Você dropou: ${item_para_dropar}`);
+
+                const descricao_item = inventario[item_para_dropar];
+                dadosSalaAtual.itens[item_para_dropar] = descricao_item;
+
+                delete inventario[item_para_dropar];
+            }
+
+
         }
         else {
-            console.log("\nVocê não pode seguir esse caminho.")
+            console.log("\n--- Comando inválido! ---")
         }
 
+
+        if (nomeSalaAtual === mapaDoJogo.exit) {
+            console.log("\n\n---------------------------");
+            console.log(mapaDoJogo.rooms[nomeSalaAtual].description);
+            console.log("!!!!! VOCÊ VENCEU !!!!!!");
+            rl.close();
+        }
+        else {
+            jogar();
+        }
+
+
+
+
+
+
         //Chamar 'jogar()' de novo, criando o loop
-        jogar();
+
     });
 
 }
