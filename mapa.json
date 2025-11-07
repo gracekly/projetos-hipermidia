@@ -2,21 +2,16 @@
   "main": "portao_principal",
   "exit": "jardim_secreto",
   "max_itens": 3,
-
   "rooms": {
     "portao_principal": {
       "description": "Portão principal do Castelo do Corvo. Está aberto, mas o saguão a frente parece escuro.",
       "north": "saguao_principal",
-      "south": "exterior",
       "itens": {},
       "monster": null,
       "use": []
     },
-
-    
-    
     "saguao_principal": {
-      "description": "O Saguão Principal é vasto e silencioso. Uma escadaria leva ao andar superior.",
+      "description": "Saguão Principal. O Saguão Principal é vasto e silencioso. Uma escadaria leva ao andar superior.",
       "south": "portao_principal",
       "east": "biblioteca",
       "west": "sala_de_jantar",
@@ -27,9 +22,8 @@
       "monster": null,
       "use": []
     },
-
     "biblioteca": {
-      "description": "Uma biblioteca empoeirada. As estantes estão cheias de livros antigos e um cheiro de mofo paira no ar.",
+      "description": "Biblioteca. Uma biblioteca empoeirada. As estantes estão cheias de livros antigos e um cheiro de mofo paira no ar.",
       "west": "saguao_principal",
       "north": "sala_de_leitura",
       "itens": {
@@ -43,9 +37,8 @@
       },
       "use": []
     },
-    
     "sala_de_leitura": {
-      "description": "Um pequeno cômodo adjacente à biblioteca, com uma única poltrona e uma mesa.",
+      "description": "Sala de Leitura. Um pequeno cômodo adjacente à biblioteca, com uma única poltrona e uma mesa.",
       "south": "biblioteca",
       "itens": {
         "chave_prata": "Uma chave de prata com um ornamento em formato de corvo."
@@ -53,9 +46,8 @@
       "monster": null,
       "use": []
     },
-    
     "sala_de_jantar": {
-      "description": "Uma longa mesa de jantar coberta por teias de aranha. Há uma porta trancada a oeste.",
+      "description": "Sala de jantar. Uma longa mesa de jantar coberta por teias de aranha. Há uma porta trancada a oeste.",
       "east": "saguao_principal",
       "west": "cozinha_velha",
       "itens": {
@@ -70,9 +62,8 @@
         }
       ]
     },
-
     "cozinha_velha": {
-      "description": "A cozinha do castelo. Potes e panelas estão jogados no chão. Há um barril suspeito no canto.",
+      "description": "Cozinha Velha. A cozinha do castelo. Potes e panelas estão jogados no chão. Há um barril suspeito no canto.",
       "east": "sala_de_jantar",
       "itens": {
         "corda_longa": "Uma corda grossa, talvez útil para amarrar algo."
@@ -85,9 +76,8 @@
       },
       "use": []
     },
-
     "corredor_norte": {
-      "description": "Um longo corredor no segundo andar, com várias tapeçarias rasgadas nas paredes.",
+      "description": "Corredor Norte. Um longo corredor no segundo andar, com várias tapeçarias rasgadas nas paredes.",
       "down": "saguao_principal",
       "east": "quarto_do_rei",
       "west": "sala_de_armas",
@@ -95,9 +85,8 @@
       "monster": null,
       "use": []
     },
-
     "sala_de_armas": {
-      "description": "Nesta sala, armaduras vazias e armas enferrujadas adornam as paredes. Uma passagem estreita leva ao sul.",
+      "description": "Sala de armas. Nesta sala, armaduras vazias e armas enferrujadas adornam as paredes. Uma passagem estreita leva ao sul.",
       "east": "corredor_norte",
       "south": "escadaria_secreta",
       "itens": {
@@ -106,9 +95,8 @@
       "monster": null,
       "use": []
     },
-
     "quarto_do_rei": {
-      "description": "O quarto principal, dominado por uma cama com dossel. O ar é frio e pesado.",
+      "description": "Quarto do Rei. O quarto principal, dominado por uma cama com dossel. O ar é frio e pesado.",
       "west": "corredor_norte",
       "itens": {
         "mapa_rasgado": "Um pedaço de mapa indicando um 'Jardim Secreto' no sul."
@@ -121,9 +109,8 @@
       },
       "use": []
     },
-
     "escadaria_secreta": {
-      "description": "Uma escadaria de pedra escura desce até um túnel no subsolo. O túnel está bloqueado por escombros.",
+      "description": "Esacadaria Secreta. Uma escadaria de pedra escura desce até um túnel no subsolo. O túnel está bloqueado por escombros.",
       "north": "sala_de_armas",
       "down": "jardim_secreto",
       "itens": {},
@@ -141,7 +128,6 @@
         }
       ]
     },
-    
     "jardim_secreto": {
       "description": "Você encontrou o Jardim Secreto, a saída do castelo! Uma luz suave te espera.",
       "up": "escadaria_secreta",

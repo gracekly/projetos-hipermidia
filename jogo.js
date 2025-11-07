@@ -29,6 +29,7 @@ function jogar() {
     const monstro_na_sala = dadosSalaAtual.monster;
     let saida_bloqueada = false;
 
+
     if (monstro_na_sala) {
         console.log("!! PERIGO !!: " + monstro_na_sala.description);
         saida_bloqueada = true;
@@ -97,9 +98,12 @@ function jogar() {
                 else {
                     const descricao_item = dadosSalaAtual.itens[item_para_pegar];
                     inventario[item_para_pegar] = descricao_item;
-                    delete dadosSalaAtual.itens[item_para_pegar];
 
                     console.log(`\nVocê pegou: ${item_para_pegar}`);
+                    console.log("\nDescrição: " + dadosSalaAtual.itens[item_para_pegar]);
+
+                    delete dadosSalaAtual.itens[item_para_pegar];
+
                 }
             }
             else {
@@ -110,17 +114,21 @@ function jogar() {
         } else if (comando === "usar") {
             const item_para_usar = argumento;
 
-            if (!inventario[item_para_usar]) {
+            if ((!inventario[item_para_usar]) && !monstro_na_sala) {
                 console.log(`\nVocê não tem ${item_para_usar} no seu inventário.`);
             }
             else if (monstro_na_sala) {
 
-                if (item_para_usar === monstro_na_sala.defeat_item) {
-                    console.log(`\n!!Você conseguiu derrotar: ${monstro_na_sala.name}!!`);
+                if (item_para_usar === monstro_na_sala.defeat_item && inventario[item_para_usar]) {
+                    console.log(monstro_na_sala.defeat_message);
+                    console.log(`\n!!Parabéns. Você conseguiu!!`);
                     dadosSalaAtual.monster = null;
+                    delete inventario[item_para_usar];
                 }
                 else {
-                    console.log(`\nO ${item_para_usar} não funciona contra ${monstro_na_sala.name}.`);
+                    console.log(`\nVocê não conseguiu derrotar ${monstro_na_sala.name} e perdeu sua vida.`);
+                    nomeSalaAtual = "saguao_principal";
+                    console.log(`Você renasceu no ${nomeSalaAtual}`);
                 }
             }
             else {
