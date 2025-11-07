@@ -17,6 +17,7 @@ console.log("\n### INICIANDO O JOGO... ###");
 // Pega o NOME da sala inicial
 let nomeSalaAtual = mapaDoJogo.main; //inicia no portao principal
 let inventario = {}
+let jogadorImune = false;
 
 function jogar() {
 
@@ -32,7 +33,13 @@ function jogar() {
 
     if (monstro_na_sala) {
         console.log("!! PERIGO !!: " + monstro_na_sala.description);
-        saida_bloqueada = true;
+        // Verifica se o monstro precisa do item 'imunidade' para ser derrotado e se o jogador está imune
+        if (monstro_na_sala.defeat_item === "imunidade" && jogadorImune) {
+            console.log(monstro_na_sala.defeat_message);
+            dadosSalaAtual.monster = null;
+        } else {
+            saida_bloqueada = true;
+        }
     }
 
     if (!saida_bloqueada) {
@@ -137,21 +144,33 @@ function jogar() {
                 // O .find() procura na lista 'use' por um objeto 'u' onde 'u.item' é igual ao 'itemParaUsar'
                 const interacao = dadosSalaAtual.use.find(objeto_interacao => objeto_interacao.item === item_para_usar);
 
+
                 if (interacao) {
                     console.log(interacao.description);
 
                     switch (interacao.action) {
-                        case "abrir nova direção":
-                            console.log("Ainda nao podemos seguir esse caminho...");
+                        case "criar_saida":
+                            // Cria a nova saída no objeto da sala atual
+                            dadosSalaAtual[interacao.nova_direcao] = interacao.novo_destino;
+                            console.log(`Uma nova saída foi criada para ${interacao.nova_direcao.toLowerCase()}!`);
+                            break;
+
+                        case "ganhar_imunidade":
+                            jogadorImune = true;
+                            console.log("Você está agora imune às sombras vivas.");
                             break;
 
                         case "sumir com item":
                             delete inventario[item_para_usar];
                             console.log(`Você não tem mais posse de ${item_para_usar}`);
                             break;
-                    }
 
-                } else { console.log("\nNão há mosntros aqui."); }
+                        default:
+                            console.log("Ação desconhecida.");
+                    }
+                } else {
+                    console.log("\nNão há monstros aqui.");
+                }
 
 
             }

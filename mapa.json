@@ -47,7 +47,7 @@
       "use": []
     },
     "sala_de_jantar": {
-      "description": "Sala de jantar. Uma longa mesa de jantar coberta por teias de aranha. Há uma porta trancada a oeste.",
+      "description": "Sala de jantar. Uma longa mesa de jantar coberta por teias de aranha. Há uma passagem a oeste e uma estranha porta de ferro ao norte.",
       "east": "saguao_principal",
       "west": "cozinha_velha",
       "itens": {
@@ -57,8 +57,25 @@
       "use": [
         {
           "item": "chave_prata",
-          "description": "A chave de prata encaixa na fechadura da porta oeste, que se abre com um rangido.",
-          "action": "abrir nova direção"
+          "description": "Você usa a chave na porta de ferro ao norte. Ela se destranca revelando uma sala oculta.",
+          "action": "criar_saida",
+          "nova_direcao": "north",
+          "novo_destino": "sala_imunidade"
+        }
+      ]
+    },
+    "sala_imunidade": {
+      "description": "Câmara Oculta. Uma sala pequena e poeirenta. Há um baú antigo no centro.",
+      "south": "sala_de_jantar",
+      "itens": {
+        "bau_antigo": "Um baú de madeira escura emanando uma energia estranha."
+      },
+      "monster": null,
+      "use": [
+        {
+          "item": "bau_antigo",
+          "description": "Ao abrir o baú, uma luz mágica salta para fora e é absorvida pelo seu corpo. Você se sente protegido.",
+          "action": "ganhar_imunidade"
         }
       ]
     },
@@ -110,7 +127,7 @@
       "use": []
     },
     "escadaria_secreta": {
-      "description": "Esacadaria Secreta. Uma escadaria de pedra escura desce até um túnel no subsolo. O túnel está bloqueado por escombros.",
+      "description": "Escadaria Secreta. Uma escadaria de pedra escura desce até um túnel no subsolo. O túnel está bloqueado por escombros..",
       "north": "sala_de_armas",
       "down": "jardim_secreto",
       "itens": {},
@@ -118,19 +135,42 @@
       "use": [
         {
           "item": "corda_longa",
-          "description": "Você amarra a corda a um pilar e desce pelo buraco, contornando os escombros.",
-          "action": "abrir nova direção"
+          "description": "Você amarra a corda e a joga no buraco, criando um caminho para descer.",
+          "action": "criar_saida",
+          "nova_direcao": "south",
+          "novo_destino": "labirinto_entrada"
         },
         {
           "item": "elmo",
-          "description": "Você tenta usar o elmo para cavar, mas não funciona. O elmo quebra.",
+          "description": "Você joga o elmo no buraco. Ele bate nas pedras e quebra.",
           "action": "sumir com item"
         }
       ]
     },
+    "labirinto_entrada": {
+      "description": "Início do Labirinto. Você desceu pela corda para um túnel. O caminho segue para o norte.",
+      "north": "labirinto_final",
+      "itens": {},
+      "monster": null,
+      "use": []
+    },
+    "labirinto_final": {
+      "description": "Coração do Labirinto. A saída para o jardim está ao norte, mas algo bloqueia o caminho.",
+      "south": "labirinto_entrada",
+      "north": "jardim_secreto",
+      "itens": {},
+      "monster": {
+        "name": "sombras_vivas",
+        "description": "Uma horda de sombras bloqueia a passagem! Armas normais não funcionam.",
+        "defeat_item": "imunidade",
+        "defeat_message": "Sua luz mágica repele as sombras! O caminho está livre."
+      },
+      "use": []
+    },
     "jardim_secreto": {
       "description": "Você encontrou o Jardim Secreto, a saída do castelo! Uma luz suave te espera.",
       "up": "escadaria_secreta",
+      "south": "labirinto_final",
       "itens": {},
       "monster": null,
       "use": []
